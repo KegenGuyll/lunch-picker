@@ -1,20 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <navbar/>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import navbar from './components/navbar'
+import dashboard from './components/dashboard'
+
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
+    navbar,
+    // eslint-disable-next-line
+    dashboard
+  },
+  data () {
+    return {
+      
+    }
   }
 }
 </script>
+
+
+
 
 <style>
 #app {
@@ -23,6 +35,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
