@@ -6,17 +6,18 @@
           <h1>{{city}}</h1>
 
           <input placeholder="Placeholder" type="text" v-model="city">
-          <a class="waves-effect waves-light btn" v-on:click="search">button</a>
+          <a class="waves-effect waves-light btn" v-on:click="search">Search</a>
+          <a class="waves-effect waves-light btn right " v-on:click="random">Random</a>
         </div>
       </form>
     </div>
     <div class="row">
-      <div class="col s12 m6" v-for="(post, index) in posts" v-bind:key="post.id">
-        <div  v-on:click="directions(post)" class="card">
+      <div class="col s12 m6" v-for="(post, index) in posts" v-bind:key="post.name">
+        <div class="card" v-on:click="placeid(post)" >
           <i v-on:click="close(index, post)" class="material-icons right black-text">close</i>
           <div class="card-content black-text">
             <span class="card-title">{{post.name}}</span>
-            <p>{{post.formatted_address}}</p>
+            <p v-on:click="directions(post)">{{post.formatted_address}}</p>
           </div>
           <div class="card-action">
             <div class="chip" v-for="chip in post.types" v-bind:key="chip.id">
@@ -52,7 +53,6 @@ export default {
             .catch(e => {
                 alert(e);
             }) 
-
         },
         close(index){
           this.posts.splice(index, 1)
@@ -62,6 +62,20 @@ export default {
           var lng = post.geometry.location.lng
           var id = post.place_id
           window.open('https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng + '&query_place_id=' + id, '_blank');
+        },
+        placeid(post){
+          var id = post.place_id
+          this.$router.push({path: id})
+        },
+        random(){
+          axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+' + this.city + '&key=' + apiKey)
+            .then(response =>  {
+              var placeid = this.posts = response.data.results[[Math.floor(Math.random() * 20)+ 1]].place_id
+              this.$router.push({path: placeid})
+            })
+            .catch(e => {
+                alert(e);
+            }) 
         }
     }
 }
@@ -87,4 +101,9 @@ nav{
 .chip{
   background-color: #fff263;
 }
+
+p{
+  cursor: pointer;
+}
+
 </style>
